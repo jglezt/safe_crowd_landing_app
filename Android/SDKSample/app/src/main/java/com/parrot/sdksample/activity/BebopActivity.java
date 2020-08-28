@@ -3,8 +3,9 @@ package com.parrot.sdksample.activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,11 +18,13 @@ import com.parrot.arsdk.arcontroller.ARCONTROLLER_DEVICE_STATE_ENUM;
 import com.parrot.arsdk.arcontroller.ARControllerCodec;
 import com.parrot.arsdk.arcontroller.ARFrame;
 import com.parrot.arsdk.ardiscovery.ARDiscoveryDeviceService;
+import com.parrot.sdksample.BaseActivity;
+import com.parrot.sdksample.H264Decoding;
 import com.parrot.sdksample.R;
 import com.parrot.sdksample.drone.BebopDrone;
 import com.parrot.sdksample.view.H264VideoView;
 
-public class BebopActivity extends AppCompatActivity {
+public class BebopActivity extends BaseActivity {
     private static final String TAG = "BebopActivity";
     private BebopDrone mBebopDrone;
 
@@ -31,6 +34,7 @@ public class BebopActivity extends AppCompatActivity {
     private H264VideoView mVideoView;
 
     private TextView mBatteryLabel;
+    private TextView countLabel;
     private Button mTakeOffLandBt;
     private Button mDownloadBt;
 
@@ -68,7 +72,10 @@ public class BebopActivity extends AppCompatActivity {
             if (!mBebopDrone.connect()) {
                 finish();
             }
+            mBebopDrone.setTilt((byte) 80);
+
         }
+
     }
 
     @Override
@@ -94,14 +101,10 @@ public class BebopActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+
+
     private void initIHM() {
         mVideoView = (H264VideoView) findViewById(R.id.videoView);
-
-        findViewById(R.id.emergencyBt).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                mBebopDrone.emergency();
-            }
-        });
 
         mTakeOffLandBt = (Button) findViewById(R.id.takeOffOrLandBt);
         mTakeOffLandBt.setOnClickListener(new View.OnClickListener() {
@@ -320,6 +323,7 @@ public class BebopActivity extends AppCompatActivity {
                         v.setPressed(true);
                         mBebopDrone.setRoll((byte) 50);
                         mBebopDrone.setFlag((byte) 1);
+
                         break;
 
                     case MotionEvent.ACTION_UP:
@@ -338,6 +342,7 @@ public class BebopActivity extends AppCompatActivity {
         });
 
         mBatteryLabel = (TextView) findViewById(R.id.batteryLabel);
+        countLabel = (TextView) findViewById(R.id.countView);
     }
 
     private final BebopDrone.Listener mBebopListener = new BebopDrone.Listener() {
@@ -392,12 +397,17 @@ public class BebopActivity extends AppCompatActivity {
 
         @Override
         public void configureDecoder(ARControllerCodec codec) {
+            BebopActivity.super.configureDecoder(codec);
             mVideoView.configureDecoder(codec);
         }
 
         @Override
-        public void onFrameReceived(ARFrame frame) {
+        public synchronized void onFrameReceived(ARFrame frame) {
+
+            frameData = frame.getByteData().clone();
+            frameSize = frame.getDataSize();
             mVideoView.displayFrame(frame);
+
         }
 
         @Override
@@ -441,5 +451,7 @@ public class BebopActivity extends AppCompatActivity {
                 mDownloadProgressDialog = null;
             }
         }
+
+
     };
 }

@@ -2,7 +2,7 @@ package com.parrot.sdksample.drone;
 
 import android.content.Context;
 import android.os.Handler;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull ;
 import android.util.Log;
 
 import com.parrot.arsdk.arcommands.ARCOMMANDS_ARDRONE3_MEDIARECORDEVENT_PICTUREEVENTCHANGED_ERROR_ENUM;
@@ -263,6 +263,12 @@ public class BebopDrone {
     public void setPitch(byte pitch) {
         if ((mDeviceController != null) && (mState.equals(ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_RUNNING))) {
             mDeviceController.getFeatureARDrone3().setPilotingPCMDPitch(pitch);
+        }
+    }
+
+    public void setTilt(byte tilt){
+        if ((mDeviceController != null) && (mState.equals(ARCONTROLLER_DEVICE_STATE_ENUM.ARCONTROLLER_DEVICE_STATE_RUNNING))){
+            mDeviceController.getFeatureARDrone3().setCameraOrientationV2Tilt(tilt);
         }
     }
 

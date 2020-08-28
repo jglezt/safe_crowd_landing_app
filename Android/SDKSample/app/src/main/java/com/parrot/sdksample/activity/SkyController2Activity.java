@@ -4,7 +4,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,6 +16,7 @@ import com.parrot.arsdk.arcontroller.ARCONTROLLER_DEVICE_STATE_ENUM;
 import com.parrot.arsdk.arcontroller.ARControllerCodec;
 import com.parrot.arsdk.arcontroller.ARFrame;
 import com.parrot.arsdk.ardiscovery.ARDiscoveryDeviceService;
+import com.parrot.sdksample.H264Decoding;
 import com.parrot.sdksample.R;
 import com.parrot.sdksample.drone.SkyController2Drone;
 import com.parrot.sdksample.view.H264VideoView;
@@ -28,6 +29,7 @@ public class SkyController2Activity extends AppCompatActivity {
     private ProgressDialog mDownloadProgressDialog;
 
     private H264VideoView mVideoView;
+    private H264Decoding mFrameDecoding;
 
     private TextView mDroneBatteryLabel;
     private TextView mSkyController2BatteryLabel;
@@ -94,11 +96,13 @@ public class SkyController2Activity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         mSkyController2Drone.dispose();
+        mFrameDecoding.destroyDecoder();
         super.onDestroy();
     }
 
     private void initIHM() {
         mVideoView = (H264VideoView) findViewById(R.id.videoView);
+        mFrameDecoding = new H264Decoding();
 
         findViewById(R.id.emergencyBt).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -230,11 +234,13 @@ public class SkyController2Activity extends AppCompatActivity {
         @Override
         public void configureDecoder(ARControllerCodec codec) {
             mVideoView.configureDecoder(codec);
+            mFrameDecoding.configureDecoder(codec);
         }
 
         @Override
         public void onFrameReceived(ARFrame frame) {
             mVideoView.displayFrame(frame);
+            //mFrameDecoding.displayFrame(frame);
         }
 
         @Override

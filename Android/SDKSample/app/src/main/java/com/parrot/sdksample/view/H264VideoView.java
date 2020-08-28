@@ -33,8 +33,8 @@ public class H264VideoView extends SurfaceView implements SurfaceHolder.Callback
 
     private ByteBuffer[] mBuffers;
 
-    private static final int VIDEO_WIDTH = 640;
-    private static final int VIDEO_HEIGHT = 368;
+    private static final int VIDEO_WIDTH = 512;
+    private static final int VIDEO_HEIGHT = 512;
 
     public H264VideoView(Context context) {
         super(context);

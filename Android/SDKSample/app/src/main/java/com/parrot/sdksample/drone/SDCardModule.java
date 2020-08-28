@@ -1,7 +1,7 @@
 package com.parrot.sdksample.drone;
 
 import android.os.Environment;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Log;
 
 import com.parrot.arsdk.ardatatransfer.ARDATATRANSFER_ERROR_ENUM;

@@ -1,13 +1,25 @@
+buildscript {
+    repositories {
+        google() // For Gradle 4.0+
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:4.0.0'
+
+    }
+}
+
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion '24.0.2'
+    compileSdkVersion 29
+    buildToolsVersion '29.0.2'
 
     defaultConfig {
         applicationId "com.parrot.sdksample"
-        minSdkVersion 16
-        targetSdkVersion 24
+        minSdkVersion 21
+        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
     }
@@ -20,9 +32,16 @@ android {
 }
 
 dependencies {
+    repositories {
+        google() // For Gradle 4.0+
+        jcenter()
+    }
+
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:24.2.0'
+    testImplementation 'junit:junit:4.12'
+    compile 'androidx.appcompat:appcompat:1.0.0'
+    compile 'org.pytorch:pytorch_android:1.4.0'
+    compile 'org.pytorch:pytorch_android_torchvision:1.4.0'
 
     if (rootProject.hasProperty('buildWithLocalSDK')){
         compile project(':arsdk')

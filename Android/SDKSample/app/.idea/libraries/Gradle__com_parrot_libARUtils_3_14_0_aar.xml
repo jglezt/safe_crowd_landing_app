@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="Gradle: com.parrot:libARUtils:3.14.0@aar">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/f7e5889e913c79c1ef6fcfe7df8140ef/jetified-libARUtils-3.14.0/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/f7e5889e913c79c1ef6fcfe7df8140ef/jetified-libARUtils-3.14.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/f7e5889e913c79c1ef6fcfe7df8140ef/jetified-libARUtils-3.14.0/res" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.parrot/libARUtils/3.14.0/6f4e59fd8d3c5a5fc257bff48c78d14d84486f0a/libARUtils-3.14.0-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.parrot/libARUtils/3.14.0/92e11c315f8b4dca020de08828dadc87ec6f343b/libARUtils-3.14.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

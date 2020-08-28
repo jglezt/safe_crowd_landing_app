@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="Gradle: com.parrot:libARSAL:3.14.0@aar">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/5514c380febea70c6e865340db82d765/jetified-libARSAL-3.14.0/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/5514c380febea70c6e865340db82d765/jetified-libARSAL-3.14.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/5514c380febea70c6e865340db82d765/jetified-libARSAL-3.14.0/res" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.parrot/libARSAL/3.14.0/316544cb618f33638aa8d3f6227843fb118ebbaa/libARSAL-3.14.0-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.parrot/libARSAL/3.14.0/5f7224f2e9ca5bbcb3af432c68fcb6d0a3694f6e/libARSAL-3.14.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
