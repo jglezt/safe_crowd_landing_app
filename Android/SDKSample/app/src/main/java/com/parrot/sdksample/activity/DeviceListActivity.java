@@ -25,6 +25,8 @@ import com.parrot.arsdk.ardiscovery.ARDiscoveryService;
 import com.parrot.sdksample.R;
 import com.parrot.sdksample.discovery.DroneDiscoverer;
 
+import org.opencv.android.OpenCVLoader;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -58,6 +60,11 @@ public class DeviceListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        if (!OpenCVLoader.initDebug())
+            Log.e("OpenCv", "Unable to load OpenCV");
+        else
+            Log.d("OpenCv", "OpenCV loaded");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_device_list);
         final ListView listView = (ListView) findViewById(R.id.list);

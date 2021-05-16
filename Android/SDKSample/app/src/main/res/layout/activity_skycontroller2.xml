@@ -10,23 +10,120 @@
         android:id="@+id/videoView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-    <Button
+
+    <ImageView
+        android:id="@+id/crowdView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Emergency"
-        android:id="@+id/emergencyBt"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:width="150dp"/>
+        tools:srcCompat="@tools:sample/avatars"
+        android:layout_alignParentBottom="true"
+        android:visibility="visible"/>
+
+    <TextView
+        android:id="@+id/countView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="0dp"
+        android:layout_below="@id/droneBatteryText"
+        android:text="Count: "
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#ff0000" />
+
+    <TextView
+        android:id="@+id/fpsView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="0dp"
+        android:layout_below="@id/countView"
+        android:text="FPS: "
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#ff0000" />
+
+    <TextView
+        android:id="@+id/msView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="0dp"
+        android:layout_below="@id/fpsView"
+        android:text="MS: "
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#ff0000" />
+
+    <TextView
+        android:id="@+id/altitudeView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="0dp"
+        android:layout_below="@id/msView"
+        android:text="Altitude: "
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#ff0000" />
+
+    <TextView
+        android:id="@+id/rollView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="0dp"
+        android:layout_below="@id/altitudeView"
+        android:text="Roll: "
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#ff0000" />
+
+    <TextView
+        android:id="@+id/pitchView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="0dp"
+        android:layout_below="@id/rollView"
+        android:text="Pitch: "
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#ff0000" />
+
+    <TextView
+        android:id="@+id/yawView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="0dp"
+        android:layout_below="@id/pitchView"
+        android:text="Yaw: "
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#ff0000" />
+
+    <TextView
+        android:id="@+id/tiltView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="0dp"
+        android:layout_below="@id/yawView"
+        android:text="Tilt: "
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="#ff0000" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Take picture"
-        android:id="@+id/takePictureBt"
+        android:text="SAVE DENSITY MAP"
+        android:id="@+id/saveDensityMap"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
-        android:width="150dp"/>
+        android:width="150dp"
+        android:onClick="tootgleSaveDensityMap"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -39,11 +136,12 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Download"
-        android:id="@+id/downloadBt"
+        android:text="SH B"
+        android:id="@+id/toogleCrowdModel"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:width="150dp"/>
+        android:width="150dp"
+        android:onClick="changeCrowdModel"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -98,4 +196,32 @@
         android:text="Waiting for a drone"
         android:textSize="25sp"
         android:textColor="@color/secondary_text"/>
+    <Button
+        android:id="@+id/toggleCrowdView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Transparent"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/saveDensityMap"
+        android:onClick="changeCrowdView"/>
+
+    <SeekBar
+        android:id="@+id/scalerBar"
+        android:layout_width="158dp"
+        android:layout_height="171dp"
+        android:layout_below="@id/buttonHeatDensityMap"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="18dp"
+        android:rotation="90"
+        android:splitTrack="false"/>
+
+    <Button
+        android:id="@+id/buttonHeatDensityMap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toggleCrowdView"
+        android:layout_alignParentRight="true"
+        android:text="DENSITY MAP"
+        android:onClick="toogleHeatDensityMap" />
+
 </RelativeLayout>

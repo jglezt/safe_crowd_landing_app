@@ -33,6 +33,7 @@ import com.parrot.arsdk.arutils.ARUTILS_FTP_TYPE_ENUM;
 import com.parrot.arsdk.arutils.ARUtilsException;
 import com.parrot.arsdk.arutils.ARUtilsManager;
 import com.parrot.mux.Mux;
+import com.parrot.sdksample.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -118,6 +119,12 @@ public class SkyController2Drone {
          * @param mediaName the name of the media
          */
         void onDownloadComplete(String mediaName);
+
+        void onAltitudeRecived(double altitude);
+
+        void onAttitudeReceived(double roll, double pitch, double yaw);
+
+        void onCameraOrientationReceived(double tilt, double pan);
     }
 
     private final List<Listener> mListeners;
@@ -412,6 +419,27 @@ public class SkyController2Drone {
             listener.onDownloadComplete(mediaName);
         }
     }
+
+    private void notifyAltitude(double altitude){
+        List<Listener> listenersCpy = new ArrayList<>(mListeners);
+        for (Listener listener : listenersCpy) {
+            listener.onAltitudeRecived(altitude);
+        }
+    }
+
+    private void notifyAttitude(double roll, double pitch, double yaw){
+        List<Listener> listenersCpy = new ArrayList<>(mListeners);
+        for (Listener listener : listenersCpy) {
+            listener.onAttitudeReceived(roll, pitch, yaw);
+        }
+    }
+
+    private void notifyCameraOrientation(double tilt, double pan){
+        List<Listener> listenersCpy = new ArrayList<>(mListeners);
+        for (Listener listener : listenersCpy) {
+            listener.onCameraOrientationReceived(tilt, pan);
+        }
+    }
     //endregion notify listener block
 
     private final SDCardModule.Listener mSDCardModuleListener = new SDCardModule.Listener() {
@@ -543,6 +571,47 @@ public class SkyController2Drone {
                     });
                 }
             }
+
+            else if ((commandKey == ARCONTROLLER_DICTIONARY_KEY_ENUM.ARCONTROLLER_DICTIONARY_KEY_ARDRONE3_PILOTINGSTATE_ALTITUDECHANGED) && (elementDictionary != null)){
+                ARControllerArgumentDictionary<Object> args = elementDictionary.get(ARControllerDictionary.ARCONTROLLER_DICTIONARY_SINGLE_KEY);
+                if (args != null) {
+                    final double altitude = (double)args.get(ARFeatureARDrone3.ARCONTROLLER_DICTIONARY_KEY_ARDRONE3_PILOTINGSTATE_ALTITUDECHANGED_ALTITUDE);
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            notifyAltitude(altitude);
+                        }
+                    });
+                }
+            }
+            else if ((commandKey == ARCONTROLLER_DICTIONARY_KEY_ENUM.ARCONTROLLER_DICTIONARY_KEY_ARDRONE3_PILOTINGSTATE_ATTITUDECHANGED) && (elementDictionary != null)){
+                ARControllerArgumentDictionary<Object> args = elementDictionary.get(ARControllerDictionary.ARCONTROLLER_DICTIONARY_SINGLE_KEY);
+                if (args != null) {
+                    final float roll = (float)((Double)args.get(ARFeatureARDrone3.ARCONTROLLER_DICTIONARY_KEY_ARDRONE3_PILOTINGSTATE_ATTITUDECHANGED_ROLL)).doubleValue();
+                    final float pitch = (float)((Double)args.get(ARFeatureARDrone3.ARCONTROLLER_DICTIONARY_KEY_ARDRONE3_PILOTINGSTATE_ATTITUDECHANGED_PITCH)).doubleValue();
+                    final float yaw = (float)((Double)args.get(ARFeatureARDrone3.ARCONTROLLER_DICTIONARY_KEY_ARDRONE3_PILOTINGSTATE_ATTITUDECHANGED_YAW)).doubleValue();
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            notifyAttitude(roll, pitch, yaw);
+                        }
+                    });
+                }
+            }
+
+            else if ((commandKey == ARCONTROLLER_DICTIONARY_KEY_ENUM.ARCONTROLLER_DICTIONARY_KEY_ARDRONE3_CAMERASTATE_ORIENTATION) && (elementDictionary != null)){
+                ARControllerArgumentDictionary<Object> args = elementDictionary.get(ARControllerDictionary.ARCONTROLLER_DICTIONARY_SINGLE_KEY);
+                if (args != null) {
+                    final byte tilt = (byte)((Integer)args.get(ARFeatureARDrone3.ARCONTROLLER_DICTIONARY_KEY_ARDRONE3_CAMERASTATE_ORIENTATION_TILT)).intValue();
+                    final byte pan = (byte)((Integer)args.get(ARFeatureARDrone3.ARCONTROLLER_DICTIONARY_KEY_ARDRONE3_CAMERASTATE_ORIENTATION_PAN)).intValue();
+                    mHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            notifyCameraOrientation(tilt, pan);
+                        }
+                    });
+                }
+            }
         }
     };
 
@@ -561,5 +630,6 @@ public class SkyController2Drone {
 
         @Override
         public void onFrameTimeout(ARDeviceController deviceController) {}
+
     };
 }

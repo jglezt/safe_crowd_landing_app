@@ -5,11 +5,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.TextureView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.parrot.arsdk.arcommands.ARCOMMANDS_ARDRONE3_MEDIARECORDEVENT_PICTUREEVENTCHANGED_ERROR_ENUM;
@@ -19,7 +22,6 @@ import com.parrot.arsdk.arcontroller.ARControllerCodec;
 import com.parrot.arsdk.arcontroller.ARFrame;
 import com.parrot.arsdk.ardiscovery.ARDiscoveryDeviceService;
 import com.parrot.sdksample.BaseActivity;
-import com.parrot.sdksample.H264Decoding;
 import com.parrot.sdksample.R;
 import com.parrot.sdksample.drone.BebopDrone;
 import com.parrot.sdksample.view.H264VideoView;
@@ -34,26 +36,48 @@ public class BebopActivity extends BaseActivity {
     private H264VideoView mVideoView;
 
     private TextView mBatteryLabel;
-    private TextView countLabel;
     private Button mTakeOffLandBt;
     private Button mDownloadBt;
+    private ImageView crowdView;
+    private Button toogleCrowdView;
 
     private int mNbMaxDownload;
     private int mCurrentDownloadIndex;
+
+    public void toogleHeatDensityMap(View view) {
+
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bebop);
+        this.initInference();
 
         initIHM();
-
         Intent intent = getIntent();
         ARDiscoveryDeviceService service = intent.getParcelableExtra(DeviceListActivity.EXTRA_DEVICE_SERVICE);
         mBebopDrone = new BebopDrone(this, service);
         mBebopDrone.addListener(mBebopListener);
 
     }
+
+    protected void initInference(){
+        countLabel = (TextView) findViewById(R.id.countView);
+
+        crowdView = (ImageView) findViewById(R.id.crowdView);
+        RelativeLayout frameLayout = (RelativeLayout) findViewById(R.id.piloting_view);
+        frameLayout.removeView(crowdView);
+        frameLayout.addView(crowdView);
+        crowdView.setImageResource(R.mipmap.ic_launcher);
+        crowdView.setAlpha(1f);
+
+        toogleCrowdView = (Button) findViewById(R.id.toggleCrowdView);
+        crowdViewState = CrowdViewState.SMALL;
+    }
+
+
 
     @Override
     protected void onStart() {
@@ -101,6 +125,19 @@ public class BebopActivity extends BaseActivity {
         super.onDestroy();
     }
 
+    @Override
+    protected void startCrowdDetectionThread() {
+        try{
+            mBackgroundHandler.post(new CrowdThread(this.getBaseContext(), mVideoView));
+        }catch (NullPointerException e){
+            Log.e(TAG, e.getMessage());
+        }
+    }
+
+    @Override
+    protected void drawDesityMap(Bitmap img) {
+        crowdView.setImageBitmap(img);
+    }
 
 
     private void initIHM() {
@@ -342,7 +379,6 @@ public class BebopActivity extends BaseActivity {
         });
 
         mBatteryLabel = (TextView) findViewById(R.id.batteryLabel);
-        countLabel = (TextView) findViewById(R.id.countView);
     }
 
     private final BebopDrone.Listener mBebopListener = new BebopDrone.Listener() {
@@ -397,15 +433,12 @@ public class BebopActivity extends BaseActivity {
 
         @Override
         public void configureDecoder(ARControllerCodec codec) {
-            BebopActivity.super.configureDecoder(codec);
             mVideoView.configureDecoder(codec);
         }
 
         @Override
         public synchronized void onFrameReceived(ARFrame frame) {
 
-            frameData = frame.getByteData().clone();
-            frameSize = frame.getDataSize();
             mVideoView.displayFrame(frame);
 
         }
@@ -452,6 +485,36 @@ public class BebopActivity extends BaseActivity {
             }
         }
 
-
     };
+
+    @Override
+    public void changeCrowdView(View view) {
+        switch (crowdViewState){
+            case SMALL:
+                crowdView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+                        RelativeLayout.LayoutParams.MATCH_PARENT));
+                crowdViewState = CrowdViewState.TRANSPARENT;
+                toogleCrowdView.setText("OVERLAP");
+                crowdView.setAlpha(0.5f);
+                break;
+            case TRANSPARENT:
+                crowdView.setAlpha(1f);
+                crowdViewState = CrowdViewState.OVERLAP;
+                toogleCrowdView.setText("SMALL");
+                countLabel.bringToFront();
+                break;
+            case OVERLAP:
+                crowdView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+                        RelativeLayout.LayoutParams.WRAP_CONTENT));
+                crowdViewState = CrowdViewState.SMALL;
+                toogleCrowdView.setText("TRANSPARENT");
+                break;
+        }
+    }
+
+    public void tootgleSaveDensityMap(View view) {
+    }
+
+    public void changeCrowdModel(View view) {
+    }
 }

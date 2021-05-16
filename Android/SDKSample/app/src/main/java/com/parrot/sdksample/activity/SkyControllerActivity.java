@@ -16,7 +16,6 @@ import com.parrot.arsdk.arcontroller.ARCONTROLLER_DEVICE_STATE_ENUM;
 import com.parrot.arsdk.arcontroller.ARControllerCodec;
 import com.parrot.arsdk.arcontroller.ARFrame;
 import com.parrot.arsdk.ardiscovery.ARDiscoveryDeviceService;
-import com.parrot.sdksample.H264Decoding;
 import com.parrot.sdksample.R;
 import com.parrot.sdksample.drone.SkyControllerDrone;
 import com.parrot.sdksample.view.H264VideoView;
@@ -29,7 +28,6 @@ public class SkyControllerActivity extends AppCompatActivity {
     private ProgressDialog mDownloadProgressDialog;
 
     private H264VideoView mVideoView;
-    private H264Decoding mFrameDecoding;
 
     private TextView mDroneBatteryLabel;
     private TextView mSkyControllerBatteryLabel;
@@ -97,13 +95,11 @@ public class SkyControllerActivity extends AppCompatActivity {
     public void onDestroy()
     {
         mSkyControllerDrone.dispose();
-        mFrameDecoding.destroyDecoder();
         super.onDestroy();
     }
 
     private void initIHM() {
         mVideoView = (H264VideoView) findViewById(R.id.videoView);
-        mFrameDecoding = new H264Decoding();
 
         findViewById(R.id.emergencyBt).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -235,7 +231,6 @@ public class SkyControllerActivity extends AppCompatActivity {
         @Override
         public void configureDecoder(ARControllerCodec codec) {
             mVideoView.configureDecoder(codec);
-            mFrameDecoding.configureDecoder(codec);
         }
 
         @Override
